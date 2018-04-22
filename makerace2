@@ -1,0 +1,1 @@
+g++ race2km.cpp -lpthread -o race2
