@@ -4,6 +4,7 @@
 //#include <pthread.h>
 #include <iostream> // cout
 #include <stdlib.h> // atoi
+#include <unistd.h> // sleep
 
 using namespace std;
 
@@ -18,7 +19,7 @@ typedef struct
 void* infloop(void* x)
 {
   int i, j;
-  Thread_struct * t;
+  Thread_struct* t;
  
   t = (Thread_struct*) x;
 
@@ -29,7 +30,6 @@ void* infloop(void* x)
       t->s[j] = 'a'+t->id;
     }
     t->s[j] = '\0';
-    // printf("Thread %d: %s\n", t->id, t->s);
     cout << "Thread " << t->id << ": " << t->s << "\n";
   }
 }
@@ -45,7 +45,6 @@ int main(int argc, char **argv)
   
   if (argc != 4) 
   {
-    //fprintf(stderr, "usage: race nthreads stringsize iterations\n");
 	  cout << "usage: race nthreads stringsize iterations\n";
     exit(1);
   }
@@ -70,6 +69,6 @@ int main(int argc, char **argv)
     pthread_create(tid+i, attr+i, infloop, t+i);
   }
   for (i = 0; i < nthreads; i++) pthread_join(tid[i], &retval);
-
+  // sleep(1);
   return 0;
 }
