@@ -7,46 +7,47 @@
 
 using namespace std;
 
-typedef struct {
+typedef struct 
+{
   pthread_mutex_t *lock;
   int id; 
   int size;
   int iterations;
-  char *s;
+  char* s;
 } Thread_struct;
 
-void *infloop(void *x)
+void* infloop(void* x)
 {
   int i, j;
-  Thread_struct *t;
+  Thread_struct* t;
  
-  t = (Thread_struct *) x;
+  t = (Thread_struct*) x;
 
-  for (i = 0; i < t->iterations; i++) {
+  for (i = 0; i < t->iterations; i++) 
+  {
     pthread_mutex_lock(t->lock);
     for (j = 0; j < t->size-1; j++) {
-      t->s[j] = 'A'+t->id;
+      t->s[j] = 'a'+t->id;
     }
     t->s[j] = '\0';
-    //printf("Thread %d: %s\n", t->id, t->s);
-	cout << "Thread " << t->id << ": " << t->s;
+	  cout << "Thread " << t->id << ": " << t->s << "\n";
     pthread_mutex_unlock(t->lock);
   }
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   pthread_mutex_t lock;
-  pthread_t *tid;
-  pthread_attr_t *attr;
-  Thread_struct *t;
-  void *retval;
+  pthread_t* tid;
+  pthread_attr_t* attr;
+  Thread_struct* t;
+  void* retval;
   int nthreads, size, iterations, i;
-  char *s;
+  char* s;
 
-  if (argc != 4) {
-    //fprintf(stderr, "usage: race nthreads stringsize iterations\n");
-	cout << "usage: race nthreads stringsize iterations\n";
+  if (argc != 4) 
+  {
+	  cout << "usage: race nthreads stringsize iterations\n";
     exit(1);
   }
 
@@ -60,7 +61,8 @@ main(int argc, char **argv)
   t = (Thread_struct *) malloc(sizeof(Thread_struct) * nthreads);
   s = (char *) malloc(sizeof(char *) * size);
 
-  for (i = 0; i < nthreads; i++) {
+  for (i = 0; i < nthreads; i++) 
+  {
     t[i].id = i;
     t[i].size = size;
     t[i].iterations = iterations;
@@ -70,7 +72,8 @@ main(int argc, char **argv)
     pthread_attr_setscope(attr+i, PTHREAD_SCOPE_SYSTEM);
     pthread_create(tid+i, attr+i, infloop, t+i);
   }
-  for (i = 0; i < nthreads; i++) {
+  for (i = 0; i < nthreads; i++) 
+  {
     pthread_join(tid[i], &retval);
   }
 }

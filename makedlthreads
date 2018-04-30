@@ -1,0 +1,1 @@
+g++ dlthreadskm.cpp -lpthread -o dlthreadskm
